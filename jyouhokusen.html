@@ -7,47 +7,48 @@
     <title>駅名ルーレット</title>
   </head>
   <body>
-    <script>
-		const stations1 = ["栄町", "東大手", "清水", "尼ケ坂", "森下", "大曽根", "矢田", "守山自衛隊前", "瓢箪山", "小幡", "喜多山", "大森・金城学院前", "印場", "旭前", "尾張旭", "三郷", "水野", "新瀬戸", "瀬戸市役所前", "尾張瀬戸"];
-		const stations = ["勝川", "味美", "比良", "小田井", "尾張星の宮", "枇杷島"];
-      
-	  let currentIndex = 0;
-      let interval;
-      let slowingDown = false;
+ <script>
+  const stations1 = ["栄町", "東大手", "清水", "尼ケ坂", "森下", "大曽根", "矢田", "守山自衛隊前", "瓢箪山", "小幡", "喜多山", "大森・金城学院前", "印場", "旭前", "尾張旭", "三郷", "水野", "新瀬戸", "瀬戸市役所前", "尾張瀬戸"];
+  const stations = ["勝川", "味美", "比良", "小田井", "尾張星の宮", "枇杷島"];
 
-      const rouletteElement = document.createElement("div");
-      rouletteElement.style.fontSize = "80px";
-      rouletteElement.style.textAlign = "center";
-      rouletteElement.style.position = "absolute";
-      rouletteElement.style.top = "50%";
-      rouletteElement.style.left = "50%";
-      rouletteElement.style.transform = "translate(-50%, -50%)";
-      document.body.appendChild(rouletteElement);
+  let currentIndex = 0;
+  let interval;
+  let slowingDown = false;
 
-      function updateRoulette() {
-        rouletteElement.textContent = stations[currentIndex];
-        currentIndex = (currentIndex + 1) % stations.length;
+  const rouletteElement = document.createElement("div");
+  rouletteElement.style.fontSize = "80px";
+  rouletteElement.style.textAlign = "center";
+  rouletteElement.style.position = "absolute";
+  rouletteElement.style.top = "50%";
+  rouletteElement.style.left = "50%";
+  rouletteElement.style.transform = "translate(-50%, -50%)";
+  document.body.appendChild(rouletteElement);
+
+  function updateRoulette() {
+    rouletteElement.innerHTML = stations[currentIndex].split('').join('<br>');
+    currentIndex = (currentIndex + 1) % stations.length;
+  }
+
+  function slowDown() {
+    if (slowingDown) return;
+    slowingDown = true;
+    let currentInterval = 50;
+    const slowDownInterval = setInterval(() => {
+      currentInterval *= 1.2;
+      clearInterval(interval);
+      interval = setInterval(updateRoulette, currentInterval);
+      if (currentInterval > 500) {
+        clearInterval(slowDownInterval);
+        clearInterval(interval);
+        document.body.style.backgroundColor = "yellow";
       }
+    }, 300);
+  }
 
-      function slowDown() {
-        if (slowingDown) return;
-        slowingDown = true;
-        let currentInterval = 50;
-        const slowDownInterval = setInterval(() => {
-          currentInterval *= 1.2;
-          clearInterval(interval);
-          interval = setInterval(updateRoulette, currentInterval);
-          if (currentInterval > 500) {
-            clearInterval(slowDownInterval);
-            clearInterval(interval);
-            document.body.style.backgroundColor = "yellow";
-          }
-        }, 300);
-      }
+  document.addEventListener("click", slowDown);
 
-      document.addEventListener("click", slowDown);
+  interval = setInterval(updateRoulette, 50);
+</script>
 
-      interval = setInterval(updateRoulette, 50);
-    </script>
   </body>
 </html>
