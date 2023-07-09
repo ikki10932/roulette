@@ -51,8 +51,9 @@
             clearInterval(interval);
             document.body.style.backgroundColor = "yellow";
             while (excludeStations.includes(stations[currentIndex])) {
-              currentIndex = (currentIndex + 1) % stations.length;
-            }
+              //currentIndex = (currentIndex + 1) % stations.length;
+				currentIndex = Math.floor(Math.random() * stations.length);
+			}
             updateRoulette();
           }
         }, 300);
